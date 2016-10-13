@@ -11,6 +11,8 @@
 |
 */
 
+session_start(); // TODO Add session config
+
 $app = require __DIR__.'/../bootstrap/app.php';
 
 /*
