@@ -1,0 +1,51 @@
+<?php
+
+
+namespace App\Backends;
+use App\Models;
+
+class Share
+{
+    /**
+     * @param Models\User $user
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getByUser(Models\User $user)
+    {
+        return Models\Share::where('user', $user->getUserName())
+            ->get();
+    }
+
+    public function buy(Models\User $user, Models\Player $player, $amount)
+    {
+        $share = $this->findByUserAndPlayer($user, $player);
+        if ($share === null) {
+            $share = new Models\Share();
+            $share->setAmount(0);
+            $share->setPlayer($player->getName());
+            $share->setUser($user->getUserName());
+        }
+
+        $share->setAmount($share->getAmount() + $amount);
+        $share->save();
+    }
+
+    public function sell(Models\Share $share, $amount = 1)
+    {
+        $share->setAmount($share->getAmount() - $amount);
+        if ($share->getAmount() > 0) {
+            $share->save();
+        } else {
+            $share->delete();
+        }
+    }
+
+    private function findByUserAndPlayer(Models\User $user, Models\Player $player)
+    {
+        return Models\Share::where(Models\Share::FIELD_USER, $user->getUserName())
+            ->where(Models\Share::FIELD_PLAYER, $player->getName())
+            ->get()
+            ->first();
+    }
+
+}

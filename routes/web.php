@@ -11,8 +11,6 @@
 |
 */
 
-$app->get('/', function () use ($app) {
-    $results = app('db')->select("SELECT * FROM users");
-    var_dump($results);
+$app->get('/check', function () use ($app) {
     return $app->version();
 });
