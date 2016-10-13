@@ -12,5 +12,7 @@
 */
 
 $app->get('/', function () use ($app) {
+    $results = app('db')->select("SELECT * FROM users");
+    var_dump($results);
     return $app->version();
 });
