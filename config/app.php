@@ -2,11 +2,11 @@
 
 return [
 	'providers' => [
-		Laravel\Passport\PassportServiceProvider::class,
+		Laravel\Socialite\SocialiteServiceProvider::class,
 	],
 
 	'aliases' => [
-		'Passport' => Laravel\Passport\Passport::class,
+		'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 	],
 
 	/*
