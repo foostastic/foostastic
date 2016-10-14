@@ -12,6 +12,9 @@ class Player extends Model
     const FIELD_POSITION = 'position';
     const FIELD_POINTS = 'points';
 
+    public $primaryKey = 'name';
+    public $incrementing = false;
+
     public function getName()
     {
         return $this->getAttribute(self::FIELD_NAME);

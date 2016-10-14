@@ -25,4 +25,11 @@ class Player
     {
         return Models\Player::all();
     }
+
+    public function clearAll()
+    {
+        foreach ($this->getAll() as $player) {
+            $player->delete();
+        }
+    }
 }
