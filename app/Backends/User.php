@@ -17,4 +17,11 @@ class User
             ->first();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAll()
+    {
+        return Models\User::get();
+    }
 }
