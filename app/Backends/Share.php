@@ -48,4 +48,20 @@ class Share
             ->first();
     }
 
+    /**
+     * @param Models\Player $player
+     * @return int
+     */
+    public function getPlayerAmountStock(Models\Player $player)
+    {
+        $shares = Models\Share::where(Models\Share::FIELD_PLAYER, $player->getName())
+            ->get()->all();
+        /* @var $shares \App\Models\Share[] */
+        $totalAmount = 0;
+        foreach ($shares as $share) {
+            $totalAmount += $share->getAmount();
+        }
+        return max(0, env('AVAILABLE_STOCK') - $totalAmount);
+    }
+
 }

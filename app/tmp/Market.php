@@ -2,6 +2,9 @@
 
 namespace App\tmp;
 
+use App\Backends\Player;
+use App\Backends\Share;
+
 class Market
 {
     /**
@@ -21,8 +24,15 @@ class Market
      */
     public static function random() {
         $market = Market::create();
-        foreach (Random::$RANDOM_NAMES as $name) {
-            $market->add(Stock::create($name, rand(0, 300), rand(1,3)));
+        $shareBackend = new Share();
+        $playerBackend = new Player();
+        /* @var $players \App\Models\Player[] */
+        $players = $playerBackend->getAll()->all();
+        foreach ($players as $player) {
+            $availableStocks = $shareBackend->getPlayerAmountStock($player);
+            if ($availableStocks > 0) {
+                $market->add(Stock::create($player->getName(), $player->getPoints(), $availableStocks));
+            }
         }
         return $market;
     }

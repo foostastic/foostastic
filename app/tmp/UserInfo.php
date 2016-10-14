@@ -1,6 +1,7 @@
 <?php
 
 namespace App\tmp;
+use App\Backends\User;
 
 class UserInfo
 {
@@ -43,12 +44,14 @@ class UserInfo
      * @return UserInfo
      */
     public static function create($id) {
+        $userBackend = new User();
+        $user = $userBackend->getByUsername($id);
         $info = new UserInfo();
         $info->isLogged = true;
-        $info->id = $id;
-        $info->name = $id;
-        $info->capital = rand(0, 500);
-        $info->wallet = Wallet::random();
+        $info->id = $user->getUserName();
+        $info->name = $user->getUserName();
+        $info->capital = $user->getCredit();
+        $info->wallet = Wallet::getForUser($user);
         return $info;
     }
 

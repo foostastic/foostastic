@@ -11,10 +11,27 @@ class User
      */
     public function getByUsername($username)
     {
-        return Models\User::where(Models\User::FIELD_USERNAME, $username)
+        $user = Models\User::where(Models\User::FIELD_USERNAME, $username)
             ->limit(1)
             ->get()
             ->first();
+        if ($user === null) {
+            $user = $this->create($username);
+        }
+        return $user;
+    }
+
+    /**
+     * @param $username
+     * @return \App\Models\User|null
+     */
+    public function create($username)
+    {
+        $user = new Models\User();
+        $user->setCredit(env('INIT_CREDIT'));
+        $user->setUserName($username);
+        $user->save();
+        return $user;
     }
 
 }

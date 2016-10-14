@@ -2,6 +2,9 @@
 
 namespace App\tmp;
 
+use App\Backends\Player;
+use App\Backends\Share;
+
 class Wallet
 {
     /**
@@ -23,6 +26,23 @@ class Wallet
         $wallet = Wallet::create();
         for ($i=0; $i<rand(0, 3); $i++) {
             $wallet->add(StockPurchase::random());
+        }
+        return $wallet;
+    }
+
+    /**
+     * @return Wallet
+     */
+    public static function getForUser($user) {
+        $wallet = Wallet::create();
+        $shareBackend = new Share();
+        $sharesList = $shareBackend->getByUser($user);
+        /**
+         * @var $share \App\Models\Share
+         */
+        $shares = $sharesList->all();
+        foreach($shares as $share) {
+            $wallet->add(StockPurchase::create($share->getPlayer(), $share->getBuyPrice(), $share->getAmount()));
         }
         return $wallet;
     }
@@ -62,6 +82,8 @@ class Wallet
 
     private function getPrice($stockId)
     {
-        return rand(0, 300);
+        $playerBackend = new Player();
+        $player = $playerBackend->getByName($stockId);
+        return $player->getPoints();
     }
 }
