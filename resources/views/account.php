@@ -18,8 +18,7 @@
                         </tr>
                     </thead>
                     <?php foreach ($userInfo->wallet->getAllByStock() as $stockId => $purchases) {
-//                        $currentPrice = $market->getPrice($stockId);
-                        $currentPrice = 666;
+                        $currentPrice = $shareValueCalculator->getValueForPlayerName($stockId);
                         $stockPrice = $currentPrice;
                         $amount = 0;
                         $buyPrice = 0;
