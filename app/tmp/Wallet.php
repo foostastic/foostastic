@@ -78,6 +78,7 @@ class Wallet
         foreach ($this->purchases as $purchase) {
             $valuation += $this->getPrice($purchase->stockId);
         }
+        return $valuation;
     }
 
     /*
