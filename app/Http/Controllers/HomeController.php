@@ -59,6 +59,7 @@ class HomeController extends Controller
     public function loginAction()
     {
         $_SESSION['logged'] = true;
+        $_SESSION['email'] = 'aaron@tuenti.com';
         return redirect('/account');
         // Check data and redirect
     }
