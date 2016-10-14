@@ -75,8 +75,9 @@ class Wallet
 
     public function getTotalValue() {
         $valuation = 0;
+        /** @var StockPurchase $purchase */
         foreach ($this->purchases as $purchase) {
-            $valuation += $this->getPrice($purchase->stockId);
+            $valuation += ($this->getPrice($purchase->stockId) * $purchase->purchaseAmount);
         }
         return $valuation;
     }
