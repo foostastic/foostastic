@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\tmp\Market;
 use App\tmp\Stock;
 use App\tmp\UserInfo;
+use App\Backends;
 use Illuminate\Http\Request;
 class HomeController extends Controller
 {
@@ -40,9 +41,9 @@ class HomeController extends Controller
     private function getGoogleProvider($request) {
         return new \Laravel\Socialite\Two\GoogleProvider(
             $request,
-            '320764937824-39v2usg5ua0pbv9fqf67crepdfl41v10.apps.googleusercontent.com',
-            'fIXsW3upexfByPcZC1rIanwe',
-            'https://6d59bf1b.ngrok.io/loginCallback'
+            env('OAUTH_CLIENT_ID'),
+            env('OAUTH_CLIENT_SECRET'),
+            env('OAUTH_CLIENT_REDIRECT')
         );
     }
 
@@ -58,6 +59,7 @@ class HomeController extends Controller
     public function loginAction()
     {
         $_SESSION['logged'] = true;
+        $_SESSION['email'] = 'aaron@tuenti.com';
         return redirect('/account');
         // Check data and redirect
     }
@@ -113,11 +115,15 @@ class HomeController extends Controller
     private function renderRanking()
     {
         $userInfo = $this->getUserInfo();
-        $users = [
-            UserInfo::create('edu'),
-            UserInfo::create('aaron'),
-            UserInfo::create('jaguerra'),
-        ];
+        $backend = new Backends\User();
+        $allUsers = $backend->getAll();
+        $users = [];
+        foreach ($allUsers as $user) {
+            $users[] = UserInfo::create($user->getName());
+        }
+        usort($users, function(UserInfo $a, UserInfo $b) {
+            return ($b->capital + $b->wallet->getTotalValue()) - ($a->capital + $a->wallet->getTotalValue());
+        });
         return view('ranking', ['users' => $users, 'userInfo' => $userInfo]);
     }
 
@@ -129,7 +135,11 @@ class HomeController extends Controller
     private function renderAccount()
     {
         $userInfo = $this->getUserInfo();
-        return view('account', ['userInfo' => $userInfo, 'market' => $this->getMarket()]);
+        $playerBackend = new Backends\Player();
+        $players = $playerBackend->getAll();
+        $shareValueCalculator = new \App\Calculators\ShareValue();
+
+        return view('account', ['userInfo' => $userInfo, 'players' => $players, 'shareValueCalculator' => $shareValueCalculator]);
     }
 
     /*

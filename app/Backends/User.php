@@ -34,4 +34,23 @@ class User
         return $user;
     }
 
+    /**
+     * @return Models\User|null
+     */
+    public function getCurrentUser()
+    {
+        if (!isset($_SESSION['email'])) {
+            return null;
+        }
+        $username = $_SESSION['email'];
+        return $this->getByUsername($username);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAll()
+    {
+        return Models\User::get();
+    }
 }

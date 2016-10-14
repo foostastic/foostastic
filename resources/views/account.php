@@ -1,6 +1,5 @@
 <?php
 /** @var $userInfo \App\tmp\UserInfo **/
-/** @var $market \App\tmp\Market **/
 ?>
 <!-- Account -->
 <div class="container">
@@ -19,7 +18,8 @@
                         </tr>
                     </thead>
                     <?php foreach ($userInfo->wallet->getAllByStock() as $stockId => $purchases) {
-                        $currentPrice = $market->getPrice($stockId);
+//                        $currentPrice = $market->getPrice($stockId);
+                        $currentPrice = 666;
                         $stockPrice = $currentPrice;
                         $amount = 0;
                         $buyPrice = 0;
@@ -65,7 +65,7 @@
         </div>
         <div class="col-md-5">
             <h2>Market</h2>
-            <?php if (count($market->getAllAvailable()) > 0) { ?>
+            <?php if (count($players) > 0) { ?>
                 <table class="table table-condensed">
                     <thead>
                     <tr>
@@ -74,17 +74,17 @@
                         <th class="col-md-3">&nbsp;</th>
                     </tr>
                     </thead>
-                    <?php foreach ($market->getAllAvailable() as $stock) { ?>
+                    <?php foreach ($players as /** @var \App\Models\Player $player */ $player) { ?>
                             <tr>
-                                <td><?= $stock->name ?></td>
-                                <td align="right"><?= $stock->currentPrice ?></td>
+                                <td><?= $player->getName() ?></td>
+                                <td align="right"><?= $shareValueCalculator->getValueForPlayer($player) ?></td>
                                 <td align="right">
                                     <form class="form-inline" action="/buy" method="post">
                                         <div class="form-group">
                                             <div class="input-group form-group-sm">
-                                                <input type="hidden" name="stockId" value="<?= $stock->id?>">
+                                                <input type="hidden" name="stockId" value="<?= $player->getName() ?>">
                                                 <select name="amount" class="form-control">
-                                                    <?php for ($i = 1; $i <= $stock->amountAvailable; $i++) { ?>
+                                                    <?php for ($i = 1; $i <= 10; $i++) { ?>
                                                         <option><?= $i ?></option>
                                                     <?php } ?>
                                                 </select >
