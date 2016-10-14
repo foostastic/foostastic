@@ -46,7 +46,7 @@ class Wallet
         $playerBackend = new Player();
         foreach($shares as $share) {
 
-            $wallet->add(StockPurchase::create($share->getPlayer(), $share->getBuyPrice(), $shareValue->getValueForPlayer($playerBackend->getByName($share->getPlayer()))));
+            $wallet->add(StockPurchase::create($share->getPlayer(), $share->getBuyPrice(), $share->getAmount()));
         }
         return $wallet;
     }

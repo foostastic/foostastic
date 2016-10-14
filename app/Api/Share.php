@@ -16,7 +16,8 @@ class Share
         }
 
         $shareValueCalculator = new ShareValue();
-        $neededAmount = $shareValueCalculator->getValueForPlayer($player) * $amount;
+        $valueForPlayer = $shareValueCalculator->getValueForPlayer($player);
+        $neededAmount = $valueForPlayer * $amount;
         $futureCredit = $user->getCredit() - $neededAmount;
         if ($futureCredit < 0) {
             // TODO: No credit!
@@ -24,7 +25,7 @@ class Share
         }
 
         $shareBackend = new Backends\Share();
-        $shareBackend->buy($user, $player, $amount);
+        $shareBackend->buy($user, $player, $amount, $valueForPlayer);
         $user->setCredit($futureCredit);
         $user->save();
     }

@@ -24,5 +24,5 @@ $app->get('/loginCallback', 'HomeController@loginCallback');
 $app->get('/fakeLogin', 'HomeController@loginAction');
 $app->get('/logout', 'HomeController@logoutAction');
 $app->get('/account', 'HomeController@account');
-$app->post('/buy', 'HomeController@sellAction');
-$app->post('/sell', 'HomeController@buyAction');
+$app->post('/buy', 'HomeController@buyAction');
+$app->post('/sell', 'HomeController@sellAction');
