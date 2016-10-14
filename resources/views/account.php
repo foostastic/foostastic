@@ -1,5 +1,7 @@
 <?php
 /** @var $userInfo \App\tmp\UserInfo **/
+use App\Backends\Share;
+
 ?>
 <!-- Account -->
 <div class="container">
@@ -74,7 +76,10 @@
                         <th class="col-md-3">&nbsp;</th>
                     </tr>
                     </thead>
-                    <?php foreach ($players as /** @var \App\Models\Player $player */ $player) { ?>
+                    <?php foreach ($players as /** @var \App\Models\Player $player */ $player) {
+                        $shareBackend = new Share();
+                        $availableStocks = $shareBackend->getPlayerAmountStock($player);
+                        ?>
                             <tr>
                                 <td><?= $player->getName() ?></td>
                                 <td align="right"><?= $shareValueCalculator->getValueForPlayer($player) ?></td>
@@ -84,7 +89,7 @@
                                             <div class="input-group form-group-sm">
                                                 <input type="hidden" name="stockId" value="<?= $player->getName() ?>">
                                                 <select name="amount" class="form-control">
-                                                    <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                                    <?php for ($i = 1; $i <= $availableStocks; $i++) { ?>
                                                         <option><?= $i ?></option>
                                                     <?php } ?>
                                                 </select >
