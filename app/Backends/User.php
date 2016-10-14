@@ -29,4 +29,11 @@ class User
         return $this->getByUsername($username);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAll()
+    {
+        return Models\User::get();
+    }
 }

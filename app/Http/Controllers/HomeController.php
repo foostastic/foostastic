@@ -59,6 +59,7 @@ class HomeController extends Controller
     public function loginAction()
     {
         $_SESSION['logged'] = true;
+        $_SESSION['email'] = 'aaron@tuenti.com';
         return redirect('/account');
         // Check data and redirect
     }
@@ -114,11 +115,15 @@ class HomeController extends Controller
     private function renderRanking()
     {
         $userInfo = $this->getUserInfo();
-        $users = [
-            UserInfo::create('edu'),
-            UserInfo::create('aaron'),
-            UserInfo::create('jaguerra'),
-        ];
+        $backend = new Backends\User();
+        $allUsers = $backend->getAll();
+        $users = [];
+        foreach ($allUsers as $user) {
+            $users[] = UserInfo::create($user->getName());
+        }
+        usort($users, function(UserInfo $a, UserInfo $b) {
+            return ($b->capital + $b->wallet->getTotalValue()) - ($a->capital + $a->wallet->getTotalValue());
+        });
         return view('ranking', ['users' => $users, 'userInfo' => $userInfo]);
     }
 

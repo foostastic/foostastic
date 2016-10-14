@@ -14,13 +14,6 @@
 $app->get('/google', function () use ($app) {
     return view('googleAuth');
 });
-
-
-
-$app->get('/', function () use ($app) {
-    $results = app('db')->select("SELECT * FROM users");
-    var_dump($results);
-});
 $app->get('/check', function () use ($app) {
     return $app->version();
 });
@@ -28,6 +21,7 @@ $app->get('/check', function () use ($app) {
 $app->get('/', 'HomeController@index');
 $app->get('/login', 'HomeController@login');
 $app->get('/loginCallback', 'HomeController@loginCallback');
+$app->get('/fakeLogin', 'HomeController@loginAction');
 $app->get('/logout', 'HomeController@logoutAction');
 $app->get('/account', 'HomeController@account');
 $app->post('/buy', 'HomeController@sellAction');
