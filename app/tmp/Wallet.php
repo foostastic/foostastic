@@ -4,6 +4,7 @@ namespace App\tmp;
 
 use App\Backends\Player;
 use App\Backends\Share;
+use App\Calculators\ShareValue;
 
 class Wallet
 {
@@ -41,8 +42,11 @@ class Wallet
          * @var $share \App\Models\Share
          */
         $shares = $sharesList->all();
+        $shareValue = new ShareValue();
+        $playerBackend = new Player();
         foreach($shares as $share) {
-            $wallet->add(StockPurchase::create($share->getPlayer(), $share->getBuyPrice(), $share->getAmount()));
+
+            $wallet->add(StockPurchase::create($share->getPlayer(), $share->getBuyPrice(), $shareValue->getValueForPlayer($playerBackend->getByName($share->getPlayer()))));
         }
         return $wallet;
     }
