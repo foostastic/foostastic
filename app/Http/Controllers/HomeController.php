@@ -21,26 +21,29 @@ class HomeController extends Controller
 
     public function login(Request $request)
     {
-        $googleProvider = new \Laravel\Socialite\Two\GoogleProvider(
-            $request,
-            '320764937824-39v2usg5ua0pbv9fqf67crepdfl41v10.apps.googleusercontent.com',
-            'fIXsW3upexfByPcZC1rIanwe',
-            'https://foostastic.herokuapp.com/loginCallback'
-        );
+        $googleProvider = $this->getGoogleProvider($request);
+        $googleProvider->scopes(["profile", "email", "openid", "https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.me", ]);
         $googleProvider->stateless();
         return $googleProvider->redirect();
     }
 
     public function loginCallback(Request $request)
     {
-        $googleProvider = new \Laravel\Socialite\Two\GoogleProvider(
+        $googleProvider = $this->getGoogleProvider($request);
+        $googleProvider->stateless();
+        $user = $googleProvider->user();
+        $_SESSION['logged'] = true;
+        $_SESSION['email'] = $user->getEmail();
+        return redirect('/account');
+    }
+
+    private function getGoogleProvider($request) {
+        return new \Laravel\Socialite\Two\GoogleProvider(
             $request,
             '320764937824-39v2usg5ua0pbv9fqf67crepdfl41v10.apps.googleusercontent.com',
             'fIXsW3upexfByPcZC1rIanwe',
-            'https://foostastic.herokuapp.com/loginCallback'
+            'https://6d59bf1b.ngrok.io/loginCallback'
         );
-        $user = $googleProvider->user();
-        var_dump($user);
     }
 
     public function account()
@@ -139,7 +142,7 @@ class HomeController extends Controller
     private function getUserInfo()
     {
         if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
-            return UserInfo::create('aaron');
+            return UserInfo::create($_SESSION['email']);
         }
         return UserInfo::unknown();
     }
