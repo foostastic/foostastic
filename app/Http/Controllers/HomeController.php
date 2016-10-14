@@ -30,7 +30,7 @@ class HomeController extends Controller
     public function account()
     {
         // Check login status
-        if ($_SESSION['logged'] !== true) {
+        if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
             return redirect('/');
         }
 
@@ -67,7 +67,7 @@ class HomeController extends Controller
     public function sellAction(Request $request)
     {
         // Check login status
-        if ($_SESSION['logged'] !== true) {
+        if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
             return redirect('/');
         }
 
@@ -92,7 +92,7 @@ class HomeController extends Controller
     public function buyAction(Request $request)
     {
         // Check login status
-        if ($_SESSION['logged'] !== true) {
+        if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
             return redirect('/');
         }
 
