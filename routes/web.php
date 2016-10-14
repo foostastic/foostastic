@@ -11,6 +11,13 @@
 |
 */
 
+$app->get('/google', function () use ($app) {
+    return view('googleAuth');
+});
+
+$app->get('/auth/google', 'auth\AuthController@redirectToGoogle');
+$app->get('auth/google/callback', 'auth\AuthController@handleGoogleCallback');
+
 $app->get('/', function () use ($app) {
     $results = app('db')->select("SELECT * FROM users");
     var_dump($results);
