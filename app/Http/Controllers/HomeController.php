@@ -117,9 +117,10 @@ class HomeController extends Controller
         $userInfo = $this->getUserInfo();
         $backend = new Backends\User();
         $allUsers = $backend->getAll();
+
         $users = [];
-        foreach ($allUsers as $user) {
-            $users[] = UserInfo::create($user->getName());
+        foreach ($allUsers->all() as $user) {
+            $users[] = UserInfo::create($user->getUserName());
         }
         usort($users, function(UserInfo $a, UserInfo $b) {
             return ($b->capital + $b->wallet->getTotalValue()) - ($a->capital + $a->wallet->getTotalValue());
