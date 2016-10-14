@@ -52,5 +52,4 @@ class Player extends Model
         return $this->setAttribute(self::FIELD_POINTS, $value);
     }
 
-//    protected $primaryKey = 'name';
 }

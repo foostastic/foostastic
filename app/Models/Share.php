@@ -11,6 +11,8 @@ class Share extends Model
     const FIELD_AMOUNT = 'amount';
     const FIELD_BUY_PRICE = 'buy_price';
 
+    public $timestamps = false;
+
     public function getPlayer()
     {
         return $this->getAttribute(self::FIELD_PLAYER);
