@@ -86,8 +86,9 @@ class Wallet
 
     private function getPrice($stockId)
     {
+        $calculator = new ShareValue();
         $playerBackend = new Player();
         $player = $playerBackend->getByName($stockId);
-        return $player->getPoints();
+        return $calculator->getValueForPlayer($player);
     }
 }
