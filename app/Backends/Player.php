@@ -23,7 +23,9 @@ class Player
      */
     public function getAll()
     {
-        return Models\Player::all();
+        return Models\Player::orderBy(Models\Player::FIELD_DIVISION)
+            ->orderBy(Models\Player::FIELD_POSITION)
+            ->get();
     }
 
     public function clearAll()

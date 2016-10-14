@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\tmp\Market;
 use App\tmp\Stock;
 use App\tmp\UserInfo;
+use App\Backends;
 
 class HomeController extends Controller
 {
@@ -107,7 +108,11 @@ class HomeController extends Controller
     private function renderAccount()
     {
         $userInfo = $this->getUserInfo();
-        return view('account', ['userInfo' => $userInfo, 'market' => $this->getMarket()]);
+        $playerBackend = new Backends\Player();
+        $players = $playerBackend->getAll();
+        $shareValueCalculator = new \App\Calculators\ShareValue();
+
+        return view('account', ['userInfo' => $userInfo, 'players' => $players, 'shareValueCalculator' => $shareValueCalculator]);
     }
 
     /*
