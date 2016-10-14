@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\tmp\Market;
 use App\tmp\Stock;
 use App\tmp\UserInfo;
-
+use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function __construct() {}
@@ -19,9 +19,28 @@ class HomeController extends Controller
         return $this->renderOnCanvas($this->renderRanking(), '/home');
     }
 
-    public function login()
+    public function login(Request $request)
     {
-        return $this->renderOnCanvas($this->renderLoginForm(), '/login');
+        $googleProvider = new \Laravel\Socialite\Two\GoogleProvider(
+            $request,
+            '320764937824-39v2usg5ua0pbv9fqf67crepdfl41v10.apps.googleusercontent.com',
+            'fIXsW3upexfByPcZC1rIanwe',
+            'https://foostastic.herokuapp.com/auth/google/callback'
+        );
+        $googleProvider->stateless();
+        return $googleProvider->redirect();
+    }
+
+    public function loginCallback(Request $request)
+    {
+        $googleProvider = new \Laravel\Socialite\Two\GoogleProvider(
+            $request,
+            '320764937824-39v2usg5ua0pbv9fqf67crepdfl41v10.apps.googleusercontent.com',
+            'fIXsW3upexfByPcZC1rIanwe',
+            'https://foostastic.herokuapp.com/auth/google/callback'
+        );
+        $user = $googleProvider->user();
+        var_dump($user);
     }
 
     public function account()

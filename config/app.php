@@ -3,6 +3,7 @@
 return [
 	'providers' => [
 		Laravel\Socialite\SocialiteServiceProvider::class,
+		\App\Providers\AuthServiceProvider::class,
 	],
 
 	'aliases' => [
