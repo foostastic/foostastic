@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Share;
 use App\tmp\Market;
 use App\tmp\Stock;
 use App\tmp\UserInfo;
@@ -70,16 +71,38 @@ class HomeController extends Controller
         return redirect('/');
     }
 
-    public function sellAction()
+    public function sellAction(Request $request)
     {
-        // TODO Implement selling process
-        return redirect('/');
+        $stockId = $request->input('stockId');
+        $amount = $request->input('amount');
+
+        $playerBackend = new Backends\Player();
+        $player = $playerBackend->getByName($stockId);
+
+        $userBackend = new Backends\User();
+        $user = $userBackend->getCurrentUser();
+
+        $shareBackend = new Backends\Share();
+        $share = $shareBackend->findByUserAndPlayer($user, $player);
+
+        $api = new \App\Api\Share();
+        $api->sell($share, $amount);
+
+        return redirect('/account');
     }
 
-    public function buyAction()
+    public function buyAction(Request $request)
     {
-        // TODO Implement buying process
-        return redirect('/');
+        $stockId = $request->input('stockId');
+        $amount = $request->input('amount');
+
+        $playerBackend = new Backends\Player();
+        $player = $playerBackend->getByName($stockId);
+
+        $api = new \App\Api\Share();
+        $api->buy($player, $amount);
+
+        return redirect('/account');
     }
 
     /*
@@ -128,11 +151,6 @@ class HomeController extends Controller
         return view('ranking', ['users' => $users, 'userInfo' => $userInfo]);
     }
 
-    private function renderLoginForm()
-    {
-        return view('login');
-    }
-
     private function renderAccount()
     {
         $userInfo = $this->getUserInfo();
@@ -156,10 +174,5 @@ class HomeController extends Controller
             return UserInfo::create($_SESSION['email']);
         }
         return UserInfo::unknown();
-    }
-
-    private function getMarket()
-    {
-        return Market::random();
     }
 }

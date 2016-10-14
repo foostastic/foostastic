@@ -9,6 +9,9 @@ class User extends Model
     const FIELD_USERNAME = 'username';
     const FIELD_CREDIT = 'credit';
 
+    public $primaryKey = 'username';
+    public $incrementing = false;
+
     public function getUserName()
     {
         return $this->getAttribute(self::FIELD_USERNAME);
