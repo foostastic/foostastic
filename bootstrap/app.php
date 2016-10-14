@@ -2,10 +2,10 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+
 try {
     (new Dotenv\Dotenv(__DIR__.'/../'))->load();
 } catch (Dotenv\Exception\InvalidPathException $e) {
-    //
 }
 
 /*
@@ -22,8 +22,7 @@ try {
 $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
-
-// $app->withFacades();
+$app->withFacades();
 
 $app->withEloquent();
 
@@ -60,12 +59,13 @@ $app->singleton(
 */
 
 // $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
+//    \Illuminate\Session\Middleware\StartSession::class,
+//    \Illuminate\View\Middleware\ShareErrorsFromSession::class,
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+ $app->routeMiddleware([
+     'auth' => App\Http\Middleware\Authenticate::class,
+ ]);
 
 /*
 |--------------------------------------------------------------------------
@@ -78,9 +78,9 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+//$app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
+//$app->register(App\Providers\EventServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

@@ -6,7 +6,7 @@ use App\tmp\Market;
 use App\tmp\Stock;
 use App\tmp\UserInfo;
 use App\Backends;
-
+use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function __construct() {}
@@ -20,9 +20,31 @@ class HomeController extends Controller
         return $this->renderOnCanvas($this->renderRanking(), '/home');
     }
 
-    public function login()
+    public function login(Request $request)
     {
-        return $this->renderOnCanvas($this->renderLoginForm(), '/login');
+        $googleProvider = $this->getGoogleProvider($request);
+        $googleProvider->scopes(["profile", "email", "openid", "https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.me", ]);
+        $googleProvider->stateless();
+        return $googleProvider->redirect();
+    }
+
+    public function loginCallback(Request $request)
+    {
+        $googleProvider = $this->getGoogleProvider($request);
+        $googleProvider->stateless();
+        $user = $googleProvider->user();
+        $_SESSION['logged'] = true;
+        $_SESSION['email'] = $user->getEmail();
+        return redirect('/account');
+    }
+
+    private function getGoogleProvider($request) {
+        return new \Laravel\Socialite\Two\GoogleProvider(
+            $request,
+            '320764937824-39v2usg5ua0pbv9fqf67crepdfl41v10.apps.googleusercontent.com',
+            'fIXsW3upexfByPcZC1rIanwe',
+            'https://6d59bf1b.ngrok.io/loginCallback'
+        );
     }
 
     public function account()
@@ -125,7 +147,7 @@ class HomeController extends Controller
     private function getUserInfo()
     {
         if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
-            return UserInfo::create('aaron');
+            return UserInfo::create($_SESSION['email']);
         }
         return UserInfo::unknown();
     }
