@@ -12,6 +12,13 @@ class ShareValue
         return (int)($player->getPoints() * ($this->getRatioForDivision($player->getDivision())));
     }
 
+    public function getValueForPlayerName($playerName)
+    {
+        $playerBackend = new Backends\Player();
+        $player = $playerBackend->getByName($playerName);
+        return $player !== null ? $this->getValueForPlayer($player) : 0;
+    }
+
     public function getValueForShare(Share $share)
     {
         $playerBackend = new Backends\Player();

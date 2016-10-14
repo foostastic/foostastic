@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
 
         Schema::create('shares', function (Blueprint $table) {
             // No support for composed PKs in ORM so...
-            $table->unsignedInteger('id')->primary();
+            $table->increments('id');
             $table->string('player');
             $table->string('user');
             $table->unsignedInteger('amount')->default(1);
