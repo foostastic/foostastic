@@ -16,7 +16,7 @@ class Share
             ->get();
     }
 
-    public function buy(Models\User $user, Models\Player $player, $amount)
+    public function buy(Models\User $user, Models\Player $player, $amount, $price)
     {
         $share = $this->findByUserAndPlayer($user, $player);
         if ($share === null) {
@@ -24,9 +24,11 @@ class Share
             $share->setAmount(0);
             $share->setPlayer($player->getName());
             $share->setUser($user->getUserName());
+            $share->setBuyPrice($price);
         }
 
         $share->setAmount($share->getAmount() + $amount);
+        $share->setBuyPrice($price); // Review buy price not updating always
         $share->save();
     }
 
@@ -40,7 +42,7 @@ class Share
         }
     }
 
-    private function findByUserAndPlayer(Models\User $user, Models\Player $player)
+    public function findByUserAndPlayer(Models\User $user, Models\Player $player)
     {
         return Models\Share::where(Models\Share::FIELD_USER, $user->getUserName())
             ->where(Models\Share::FIELD_PLAYER, $player->getName())
