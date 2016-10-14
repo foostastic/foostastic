@@ -41,9 +41,9 @@ class HomeController extends Controller
     private function getGoogleProvider($request) {
         return new \Laravel\Socialite\Two\GoogleProvider(
             $request,
-            '320764937824-39v2usg5ua0pbv9fqf67crepdfl41v10.apps.googleusercontent.com',
-            'fIXsW3upexfByPcZC1rIanwe',
-            'https://6d59bf1b.ngrok.io/loginCallback'
+            env('OAUTH_CLIENT_ID'),
+            env('OAUTH_CLIENT_SECRET'),
+            env('OAUTH_CLIENT_REDIRECT')
         );
     }
 
