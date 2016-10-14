@@ -17,4 +17,16 @@ class User
             ->first();
     }
 
+    /**
+     * @return Models\User|null
+     */
+    public function getCurrentUser()
+    {
+        if (!isset($_SESSION['email'])) {
+            return null;
+        }
+        $username = $_SESSION['email'];
+        return $this->getByUsername($username);
+    }
+
 }
