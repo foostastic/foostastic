@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Share;
-use App\tmp\Market;
-use App\tmp\Stock;
-use App\tmp\UserInfo;
 use App\Backends;
+use App\tmp\UserInfo;
 use Illuminate\Http\Request;
+
 class HomeController extends Controller
 {
     public function __construct() {}
@@ -29,6 +27,20 @@ class HomeController extends Controller
         return $googleProvider->redirect();
     }
 
+    public function account()
+    {
+        // Check login status
+        if ($_SESSION['logged'] !== true) {
+            return redirect('/');
+        }
+
+        return $this->renderOnCanvas($this->renderAccount(), '/login');
+    }
+
+    /*
+     * ACTIONS
+     */
+
     public function loginCallback(Request $request)
     {
         $googleProvider = $this->getGoogleProvider($request);
@@ -39,30 +51,11 @@ class HomeController extends Controller
         return redirect('/account');
     }
 
-    private function getGoogleProvider($request) {
-        return new \Laravel\Socialite\Two\GoogleProvider(
-            $request,
-            env('OAUTH_CLIENT_ID'),
-            env('OAUTH_CLIENT_SECRET'),
-            env('OAUTH_CLIENT_REDIRECT')
-        );
-    }
-
-    public function account()
-    {
-        return $this->renderOnCanvas($this->renderAccount(), '/login');
-    }
-
-    /*
-     * ACTIONS
-     */
-
     public function loginAction()
     {
         $_SESSION['logged'] = true;
         $_SESSION['email'] = 'aaron@tuenti.com';
         return redirect('/account');
-        // Check data and redirect
     }
 
     public function logoutAction()
@@ -73,6 +66,11 @@ class HomeController extends Controller
 
     public function sellAction(Request $request)
     {
+        // Check login status
+        if ($_SESSION['logged'] !== true) {
+            return redirect('/');
+        }
+
         $stockId = $request->input('stockId');
         $amount = $request->input('amount');
 
@@ -93,6 +91,11 @@ class HomeController extends Controller
 
     public function buyAction(Request $request)
     {
+        // Check login status
+        if ($_SESSION['logged'] !== true) {
+            return redirect('/');
+        }
+
         $stockId = $request->input('stockId');
         $amount = $request->input('amount');
 
@@ -161,10 +164,18 @@ class HomeController extends Controller
         return view('account', ['userInfo' => $userInfo, 'players' => $players, 'shareValueCalculator' => $shareValueCalculator]);
     }
 
+    private function getGoogleProvider($request) {
+        return new \Laravel\Socialite\Two\GoogleProvider(
+            $request,
+            env('OAUTH_CLIENT_ID'),
+            env('OAUTH_CLIENT_SECRET'),
+            env('OAUTH_CLIENT_REDIRECT')
+        );
+    }
+
     /*
      * DATA COLLECTION
      */
-
     /**
      * @return UserInfo
      */
@@ -174,5 +185,6 @@ class HomeController extends Controller
             return UserInfo::create($_SESSION['email']);
         }
         return UserInfo::unknown();
+
     }
 }
