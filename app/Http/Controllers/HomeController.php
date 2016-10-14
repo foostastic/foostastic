@@ -25,7 +25,7 @@ class HomeController extends Controller
             $request,
             '320764937824-39v2usg5ua0pbv9fqf67crepdfl41v10.apps.googleusercontent.com',
             'fIXsW3upexfByPcZC1rIanwe',
-            'https://foostastic.herokuapp.com/auth/google/callback'
+            'https://foostastic.herokuapp.com/loginCallback'
         );
         $googleProvider->stateless();
         return $googleProvider->redirect();
@@ -37,7 +37,7 @@ class HomeController extends Controller
             $request,
             '320764937824-39v2usg5ua0pbv9fqf67crepdfl41v10.apps.googleusercontent.com',
             'fIXsW3upexfByPcZC1rIanwe',
-            'https://foostastic.herokuapp.com/auth/google/callback'
+            'https://foostastic.herokuapp.com/loginCallback'
         );
         $user = $googleProvider->user();
         var_dump($user);
