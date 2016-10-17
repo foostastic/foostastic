@@ -33,6 +33,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+        \app(\App\Api\Airbrake::class)->notify($e);
         parent::report($e);
     }
 

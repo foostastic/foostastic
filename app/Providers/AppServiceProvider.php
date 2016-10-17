@@ -13,6 +13,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('App\Api\Airbrake', function ($app) {
+            $api =  new \App\Api\Airbrake();
+            $api->init();
+            return $api;
+        });
     }
 }
