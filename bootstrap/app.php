@@ -82,6 +82,13 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 //$app->register(App\Providers\EventServiceProvider::class);
 
+
+$app->configureMonologUsing(function($monolog) {
+    $stream = new \Monolog\Handler\ErrorLogHandler();
+    $stream->setFormatter(new \Monolog\Formatter\LineFormatter("APP %channel%.%level_name%: %message% %context% %extra%\n"));
+    $monolog->pushHandler($stream);
+    return $monolog;
+});
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
