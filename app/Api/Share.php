@@ -11,11 +11,7 @@ class Share
     {
         $userBackend = new Backends\User();
         $user = $userBackend->getCurrentUser();
-        if ($user === null) {
-            return;
-        }
-
-        if ($amount == 0) {
+        if ($user === null || $amount < 1) {
             return;
         }
 
@@ -38,7 +34,7 @@ class Share
     {
         $userBackend = new Backends\User();
         $user = $userBackend->getCurrentUser();
-        if ($user === null) {
+        if ($user === null || $amount < 1) {
             return;
         }
 

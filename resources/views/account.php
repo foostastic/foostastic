@@ -78,14 +78,22 @@ use App\Backends\Share;
                     <?php foreach ($players as /** @var \App\Models\Player $player */ $player) {
                         $shareBackend = new Share();
                         $availableStocks = $shareBackend->getPlayerAmountStock($player);
-                        if ($availableStocks == 0) {
-                            continue;
-                        }
                         ?>
                             <tr>
-                                <td><?= $player->getName() ?></td>
+                                <td>
+                                    <?= $player->getName() ?>
+                                    <?php if ($availableStocks == 1) { ?>
+                                        <span class="label label-warning">Only 1 left</span>
+                                    <?php }  ?>
+                                    <?php if ($availableStocks == 0) { ?>
+                                        <span class="label label-danger">Sold out</span>
+                                    <?php } ?>
+                                </td>
                                 <td align="right"><?= $shareValueCalculator->getValueForPlayer($player) ?></td>
                                 <td align="right">
+                                    <?php if ($availableStocks == 0) { ?>
+                                        <button class="btn btn-secondary btn-sm disabled" disabled>Sold out</button >
+                                    <?php } else { ?>
                                     <form class="form-inline" action="/buy" method="post">
                                         <div class="form-group">
                                             <div class="input-group form-group-sm">
@@ -101,6 +109,7 @@ use App\Backends\Share;
                                             </div>
                                         </div>
                                     </form>
+                                    <?php } ?>
                                 </td>
                             </tr>
                     <?php } ?>
