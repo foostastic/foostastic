@@ -67,18 +67,28 @@ use App\Backends\Share;
         <div class="col-md-5">
             <h2>Market</h2>
             <?php if (count($players) > 0) { ?>
+                <?php $currentDivision = 0 ?>
                 <table class="table table-condensed">
-                    <thead>
-                    <tr>
-                        <th class="col-md-2">Player</th>
-                        <th class="col-md-1 text-right">Value</th>
-                        <th class="col-md-3">&nbsp;</th>
-                    </tr>
-                    </thead>
                     <?php foreach ($players as /** @var \App\Models\Player $player */ $player) {
                         $shareBackend = new Share();
                         $availableStocks = $shareBackend->getPlayerAmountStock($player);
+                        $drawDivisionHeader = $currentDivision != $player->getDivision();
+                        $currentDivision = $player->getDivision();
                         ?>
+                        <?php if ($drawDivisionHeader) { ?>
+                            <tr>
+                                <td colspan="3">
+                                    <p class="h3">
+                                        Division <?= $player->getDivision() ?>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="col-md-2">Player</th>
+                                <th class="col-md-1 text-right">Value</th>
+                                <th class="col-md-3">&nbsp;</th>
+                            </tr>
+                        <?php } ?>
                             <tr>
                                 <td>
                                     <?= $player->getName() ?>
