@@ -42,11 +42,10 @@ class Wallet
          * @var $share \App\Models\Share
          */
         $shares = $sharesList->all();
-        $shareValue = new ShareValue();
-        $playerBackend = new Player();
         foreach($shares as $share) {
-
-            $wallet->add(StockPurchase::create($share->getPlayer(), $share->getBuyPrice(), $share->getAmount()));
+            if ($share->getAmount() > 0) {
+                $wallet->add(StockPurchase::create($share->getPlayer(), $share->getBuyPrice(), $share->getAmount()));
+            }
         }
         return $wallet;
     }

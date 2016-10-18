@@ -78,6 +78,9 @@ use App\Backends\Share;
                     <?php foreach ($players as /** @var \App\Models\Player $player */ $player) {
                         $shareBackend = new Share();
                         $availableStocks = $shareBackend->getPlayerAmountStock($player);
+                        if ($availableStocks == 0) {
+                            continue;
+                        }
                         ?>
                             <tr>
                                 <td><?= $player->getName() ?></td>
