@@ -15,6 +15,10 @@ class Share
             return;
         }
 
+        if ($amount == 0) {
+            return;
+        }
+
         $shareValueCalculator = new ShareValue();
         $valueForPlayer = $shareValueCalculator->getValueForPlayer($player);
         $neededAmount = $valueForPlayer * $amount;
