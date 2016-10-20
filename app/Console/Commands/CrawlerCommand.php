@@ -25,7 +25,12 @@ class CrawlerCommand extends Command
      */
     public function fire()
     {
-        $html = file_get_contents('http://www.suso.eu/foos/ajax/summary/3');
+        $url = env('FOOS_RESULTS_URL', false);
+        if (!$url) {
+            $this->error('Missing crawler URL config');
+            return;
+        }
+        $html = file_get_contents($url);
         $crawler = new Crawler($html);
         $results = array();
         $crawler->filter('div.col-md-4')
@@ -60,14 +65,29 @@ class CrawlerCommand extends Command
     private function persist($records)
     {
         $backend = new Backends\Player();
-        $backend->clearAll();
+        $skippedPlayers = [];
+        $updatedPlayers = [];
         foreach($records as $record) {
-            $player = new Models\Player();
-            $player->setName($record['player']);
+            $name = $record['player'];
+            $points = $record['points'];
+            if ($points == 0) {
+                $skippedPlayers[] = $name;
+                continue;
+            }
+            $player = $backend->getByName($name);
+            if ($player === null) {
+                $player = new Models\Player();
+                $player->setName($record['player']);
+            }
             $player->setDivision($record['division']);
             $player->setPoints($record['points']);
             $player->setPosition($record['pos']);
             $player->save();
+            $updatedPlayers[] = $name;
+        }
+        \Log::info(sprintf('Updated %s players', count($updatedPlayers)));
+        if (count($skippedPlayers) > 0) {
+            \Log::warn(sprintf("Skipped %s players with 0 points", count($skippedPlayers)), $skippedPlayers);
         }
     }
 
