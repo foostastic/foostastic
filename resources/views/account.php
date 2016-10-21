@@ -20,19 +20,22 @@ use App\Backends\Share;
                         </tr>
                     </thead>
                     <?php foreach ($userInfo->wallet->getAllByStock() as $stockId => $purchases) {
-                        $currentPrice = $shareValueCalculator->getValueForPlayerName($stockId);
-                        $stockPrice = $currentPrice;
                         $amount = 0;
                         $buyPrice = 0;
                         foreach ($purchases as $purchase) {
-                            $amount += $purchase->purchaseAmount;
-                            $buyPrice += $purchase->purchaseAmount * $purchase->purchaseValue;
-                        }
-                        $difference = $stockPrice * $amount - $buyPrice;
-                        $percentage = $difference*100/$buyPrice;
-                        ?>
+                            $currentPrice = $shareValueCalculator->getValueForPlayerName($stockId) * $purchase->purchaseAmount;
+                            $amount = $purchase->purchaseAmount;
+                            $buyPrice = $purchase->purchaseAmount * $purchase->purchaseValue;
+                            $difference = $currentPrice  - $buyPrice;
+                            $percentage = $difference*100/$buyPrice;
+                            ?>
                             <tr>
-                                <td><?= $stockId ?></td>
+                                <td>
+                                    <?= $stockId ?>
+                                    <?php if ($amount > 1) { ?>
+                                        ( x<?= $amount ?> )
+                                    <?php } ?>
+                                </td>
                                 <td align="right"><?= $buyPrice ?> </td>
                                 <td align="right"><?= $currentPrice ?></td>
                                 <td align="center">
@@ -44,7 +47,7 @@ use App\Backends\Share;
                                     <form class="form-inline" action="/sell" method="post">
                                         <div class="form-group form-group-sm">
                                             <div class="input-group">
-                                                <input type="hidden" name="stockId" value="<?= $stockId?>">
+                                                <input type="hidden" name="shareId" value="<?= $purchase->shareId ?>">
                                                 <select name="amount" class="form-control">
                                                     <?php for ($i = 1; $i <= $amount; $i++) { ?>
                                                         <option><?= $i ?></option>
@@ -58,6 +61,10 @@ use App\Backends\Share;
                                     </form>
                                 </td>
                             </tr>
+                            <?php
+                        }
+                        ?>
+
                         <?php } ?>
                 </table>
             <?php } else { ?>

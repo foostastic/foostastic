@@ -44,7 +44,7 @@ class Wallet
         $shares = $sharesList->all();
         foreach($shares as $share) {
             if ($share->getAmount() > 0) {
-                $wallet->add(StockPurchase::create($share->getPlayer(), $share->getBuyPrice(), $share->getAmount()));
+                $wallet->add(StockPurchase::create($share->getPlayer(), $share->getBuyPrice(), $share->getAmount(), $share->getId()));
             }
         }
         return $wallet;
