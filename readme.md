@@ -1,4 +1,5 @@
 # Foostastic
+[![Build Status](https://travis-ci.org/foostastic/foostastic.svg?branch=master)](https://travis-ci.org/foostastic/foostastic)
 
 ## Requirements: 
 
