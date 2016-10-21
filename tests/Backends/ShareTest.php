@@ -49,11 +49,13 @@ class ShareTest extends \TestCase
 
         $this->assertEquals(0, $backend->getByUser($user)->count());
 
-        $backend->buy($user, $player, 2);
+        $backend->buy($user, $player, 2, 100);
         $shares = $backend->getByUser($user);
+        /** @var Models\Share $share */
         $share = $shares->first();
         $this->assertEquals(1, $shares->count());
         $this->assertEquals(2, $share->getAmount());
+        $this->assertEquals(100, $share->getBuyPrice());
 
         $backend->sell($share, 1);
         $shares = $backend->getByUser($user);

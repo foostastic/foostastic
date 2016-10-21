@@ -9,7 +9,8 @@ class ShareValue
 {
     public function getValueForPlayer(Player $player)
     {
-        return (int)($player->getPoints() * ($this->getRatioForDivision($player->getDivision())));
+        $division = $player->getDivision();
+        return (int)($player->getPoints() * $this->getRatioForDivision($division) + $this->getOffsetForDivision($division));
     }
 
     public function getValueForPlayerName($playerName)
@@ -32,11 +33,20 @@ class ShareValue
     private function getRatioForDivision($division)
     {
         $values = array(
-            1 => 10,
-            2 => 5,
+            1 => 4,
+            2 => 2,
             3 => 1,
         );
         return $values[$division];
     }
 
+    private function getOffsetForDivision($division)
+    {
+        $values = array(
+            1 => 900,
+            2 => 300,
+            3 => 0,
+        );
+        return $values[$division];
+    }
 }
