@@ -1,3 +1,34 @@
 language: php
+
 php:
-  - '7.0'
+  - 7.0
+
+service:
+    - mysql
+    - memcached
+
+env:
+  global:
+    - setup=basic
+    - APP_ENV=local
+    - APP_DEBUG=true
+    - APP_KEY=
+    - DB_CONNECTION=jawsdb
+    - JAWSDB_URL='mysql://root:@127.0.0.1:3306/foostastic'
+    - CACHE_DRIVER=memcached
+    - QUEUE_DRIVER=sync
+    - AVAILABLE_STOCK=4
+    - INIT_CREDIT=800
+
+sudo: false
+
+install:
+- if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
+- if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
+- if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
+
+before_script:
+  - mysql -uroot -e 'create database foostastic;'
+
+script: vendor/bin/phpunit
+
