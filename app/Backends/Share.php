@@ -2,6 +2,7 @@
 
 
 namespace App\Backends;
+use App\Api\Logger;
 use App\Models;
 
 class Share
@@ -15,6 +16,17 @@ class Share
         return Models\Share::where('user', $user->getUserName())
             ->get();
     }
+
+    /**
+     * @param Models\User $player
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getByPlayer(Models\Player $player)
+    {
+        return Models\Share::where('player', $player->getName())
+            ->get();
+    }
+
 
     /**
      * @param $id

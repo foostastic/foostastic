@@ -32,8 +32,11 @@ class Share
         }
 
         $shareBackend->buy($user, $player, $amount, $valueForPlayer);
+
         $user->setCredit($futureCredit);
         $user->save();
+        $logger = new Logger();
+        $logger->logBuyAction($user->getUserName(), $player->getName(), $amount, $neededAmount);
     }
 
     public function sell(Models\Share $share, $amount)
@@ -58,6 +61,8 @@ class Share
 
         $user->setCredit($user->getCredit() + $addedAmount);
         $user->save();
+        $logger = new Logger();
+        $logger->logSellAction($user->getUserName(), $player->getName(), $amount, $addedAmount);
     }
 
 }
