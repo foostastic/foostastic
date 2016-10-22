@@ -16,19 +16,22 @@ class Share
             ->get();
     }
 
+    /**
+     * @param $id
+     * @return Models\Share|null
+     */
+    public function getById($id)
+    {
+        return Models\Share::find($id);
+    }
+
     public function buy(Models\User $user, Models\Player $player, $amount, $price)
     {
-        $share = $this->findByUserAndPlayer($user, $player);
-        if ($share === null) {
-            $share = new Models\Share();
-            $share->setAmount(0);
-            $share->setPlayer($player->getName());
-            $share->setUser($user->getUserName());
-            $share->setBuyPrice($price);
-        }
-
-        $share->setAmount($share->getAmount() + $amount);
-        $share->setBuyPrice($price); // Review buy price not updating always
+        $share = new Models\Share();
+        $share->setPlayer($player->getName());
+        $share->setUser($user->getUserName());
+        $share->setAmount($amount);
+        $share->setBuyPrice($price);
         $share->save();
     }
 
@@ -42,12 +45,16 @@ class Share
         }
     }
 
+    /**
+     * @param Models\User $user
+     * @param Models\Player $player
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function findByUserAndPlayer(Models\User $user, Models\Player $player)
     {
         return Models\Share::where(Models\Share::FIELD_USER, $user->getUserName())
             ->where(Models\Share::FIELD_PLAYER, $player->getName())
-            ->get()
-            ->first();
+            ->get();
     }
 
     /**
