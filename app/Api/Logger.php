@@ -28,7 +28,7 @@ class Logger
 	{
 		$playerLogBackend = new PlayerLogBackend();
 		$shareValue = new ShareValue();
-		$shareBackend = new Share();
+		$shareBackend = new Backends\Share();
 		$playerBackend = new \App\Backends\Player();
 		$userBackend = new User();
 		$usersToLogChange = array();
