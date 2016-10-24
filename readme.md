@@ -1,6 +1,6 @@
 # Foostastic
 Master: [![Build Status](https://travis-ci.org/foostastic/foostastic.svg?branch=master)](https://travis-ci.org/foostastic/foostastic)  
-Master: [![Build Status](https://travis-ci.org/foostastic/foostastic.svg?branch=integration)](https://travis-ci.org/foostastic/foostastic)  
+Integration: [![Build Status](https://travis-ci.org/foostastic/foostastic.svg?branch=integration)](https://travis-ci.org/foostastic/foostastic)  
 
 ## Requirements: 
 
