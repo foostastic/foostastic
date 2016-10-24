@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Backends;
+use App\Backends\User;
 use App\tmp\UserInfo;
 use Illuminate\Http\Request;
 
@@ -46,15 +47,19 @@ class HomeController extends Controller
         $googleProvider = $this->getGoogleProvider($request);
         $googleProvider->stateless();
         $user = $googleProvider->user();
-        $_SESSION['logged'] = true;
-        $_SESSION['email'] = $user->getEmail();
-        return redirect('/account');
+        $email = strtolower($user->getEmail());
+
+        return $this->doLogin($email);
     }
 
-    public function loginAction()
+    public function fakeLoginAction()
     {
-        $_SESSION['logged'] = true;
-        $_SESSION['email'] = 'edu@tuenti.com';
+        if (env('APP_DEBUG') == true) {
+            $this->doLogin('xxx@tuenti.com');
+        } else {
+            \Log::error("Tried to use /fakeLogin on production.");
+            $this->flash('Fake login is only allowed on dev environment! Don\'t be evil! }8-)', 'danger');
+        }
         return redirect('/account');
     }
 
@@ -77,11 +82,18 @@ class HomeController extends Controller
         $shareBackend = new Backends\Share();
         $share = $shareBackend->getById($shareId);
         if ($share == null) {
+            \Log::error("Tried to sell invalid player.", ['playerId' => $shareId, 'user' => $_SESSION['email']]);
+            $this->flash('Invalid operation on player.', 'danger');
             return redirect('/');
         }
 
         $api = new \App\Api\Share();
-        $api->sell($share, $amount);
+        $success = $api->sell($share, $amount);
+        if ($success) {
+            $this->flash('Sell operation completed successfully.', 'success');
+        } else {
+            $this->flash('Sell operation could not complete.', 'danger');
+        }
 
         return redirect('/account');
     }
@@ -99,8 +111,19 @@ class HomeController extends Controller
         $playerBackend = new Backends\Player();
         $player = $playerBackend->getByName($stockId);
 
+        if ($player === null) {
+            \Log::error("Tried to buy invalid player.", ['playerId' => $stockId, 'user' => $_SESSION['email']]);
+            $this->flash('Invalid operation on player.', 'danger');
+            return redirect('/');
+        }
+
         $api = new \App\Api\Share();
-        $api->buy($player, $amount);
+        $success = $api->buy($player, $amount);
+        if ($success) {
+            $this->flash('Buy operation completed successfully.', 'success');
+        } else {
+            $this->flash('Buy operation could not complete. Check player availability and your credit.', 'danger');
+        }
 
         return redirect('/account');
     }
@@ -113,6 +136,7 @@ class HomeController extends Controller
     {
         return view('base',
             [
+                'flashMessage' => $this->renderFlashMessage(),
                 'navbar' => $this->renderNavbar($this->getUserInfo(), $page),
                 'content' => $content
             ]
@@ -161,6 +185,18 @@ class HomeController extends Controller
         return view('account', ['userInfo' => $userInfo, 'players' => $players, 'shareValueCalculator' => $shareValueCalculator]);
     }
 
+    private function renderFlashMessage()
+    {
+        $message = null;
+        $level = null;
+        if (isset($_SESSION['flash_notification.message'])) {
+            $message = $_SESSION['flash_notification.message'];
+            $level = $_SESSION['flash_notification.level'];
+            unset($_SESSION['flash_notification.message']);
+        }
+        return view('flashMessage', ['message' => $message, 'level' => $level]);
+    }
+
     private function getGoogleProvider($request) {
         return new \Laravel\Socialite\Two\GoogleProvider(
             $request,
@@ -170,9 +206,28 @@ class HomeController extends Controller
         );
     }
 
+    public function doLogin($email)
+    {
+        $userBackend = new User();
+        $loginOrCreate = $userBackend->getByUsername($email);
+        if ($loginOrCreate !== null) {
+            $_SESSION['logged'] = true;
+            $_SESSION['email'] = $email;
+        } else {
+            \Log::warn("Tried to create account for $email");
+            $this->flash('Account creation is restricted to @tuenti.com domain. Sorry!', 'danger');
+        }
+        return redirect('/account');
+    }
+
+    private function flash($message, $level='info') {
+        $_SESSION['flash_notification.message'] = $message;
+        $_SESSION['flash_notification.level'] = $level;
+    }
     /*
      * DATA COLLECTION
      */
+
     /**
      * @return UserInfo
      */
