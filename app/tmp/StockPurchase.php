@@ -20,16 +20,22 @@ class StockPurchase
     public $purchaseValue;
 
     /**
+     * @var int
+     */
+    public $shareId;
+
+    /**
      * @param String $stockId
      * @param float $price
      * @param int $amount
      * @return StockPurchase
      */
-    public static function create($stockId, $price, $amount) {
+    public static function create($stockId, $price, $amount, $shareId) {
         $purchase = new StockPurchase();
         $purchase->stockId = $stockId;
         $purchase->purchaseAmount = $amount;
         $purchase->purchaseValue = $price;
+        $purchase->shareId = $shareId;
         return $purchase;
     }
 

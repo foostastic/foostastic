@@ -26,3 +26,4 @@ $app->get('/logout', 'HomeController@logoutAction');
 $app->get('/account', 'HomeController@account');
 $app->post('/buy', 'HomeController@buyAction');
 $app->post('/sell', 'HomeController@sellAction');
+$app->get('/onMatchFinished', 'ObserverController@onMatchFinished');

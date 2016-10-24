@@ -15,11 +15,16 @@ class Player extends Model
     public $primaryKey = 'name';
     public $incrementing = false;
 
+
     public function getName()
     {
         return $this->getAttribute(self::FIELD_NAME);
     }
 
+    /**
+     * @param $value
+     * @return $this
+     */
     public function setName($value)
     {
         return $this->setAttribute(self::FIELD_NAME, $value);
@@ -30,6 +35,10 @@ class Player extends Model
         return $this->getAttribute(self::FIELD_DIVISION);
     }
 
+    /**
+     * @param $value
+     * @return $this
+     */
     public function setDivision($value)
     {
         return $this->setAttribute(self::FIELD_DIVISION, $value);
@@ -40,6 +49,10 @@ class Player extends Model
         return $this->getAttribute(self::FIELD_POSITION);
     }
 
+    /**
+     * @param $value
+     * @return $this
+     */
     public function setPosition($value)
     {
         return $this->setAttribute(self::FIELD_POSITION, $value);
@@ -50,6 +63,10 @@ class Player extends Model
         return $this->getAttribute(self::FIELD_POINTS);
     }
 
+    /**
+     * @param $value
+     * @return $this
+     */
     public function setPoints($value)
     {
         return $this->setAttribute(self::FIELD_POINTS, $value);

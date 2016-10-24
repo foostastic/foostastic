@@ -68,10 +68,7 @@ class ShareTest extends \TestCase
         $this->assertEquals(0, $shares->count());
     }
 
-    /**
-     * @expectedException \Illuminate\Database\QueryException
-     */
-    public function testUserAndPlayerUnique()
+    public function testUserAndPlayerNotUnique()
     {
         $share = new Models\Share();
         $share->setUser($user = 'da_user');

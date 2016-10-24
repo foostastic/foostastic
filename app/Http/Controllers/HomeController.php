@@ -54,7 +54,7 @@ class HomeController extends Controller
     public function loginAction()
     {
         $_SESSION['logged'] = true;
-        $_SESSION['email'] = 'aaron@tuenti.com';
+        $_SESSION['email'] = 'edu@tuenti.com';
         return redirect('/account');
     }
 
@@ -71,17 +71,14 @@ class HomeController extends Controller
             return redirect('/');
         }
 
-        $stockId = $request->input('stockId');
+        $shareId = $request->input('shareId');
         $amount = $request->input('amount');
 
-        $playerBackend = new Backends\Player();
-        $player = $playerBackend->getByName($stockId);
-
-        $userBackend = new Backends\User();
-        $user = $userBackend->getCurrentUser();
-
         $shareBackend = new Backends\Share();
-        $share = $shareBackend->findByUserAndPlayer($user, $player);
+        $share = $shareBackend->getById($shareId);
+        if ($share == null) {
+            return redirect('/');
+        }
 
         $api = new \App\Api\Share();
         $api->sell($share, $amount);
