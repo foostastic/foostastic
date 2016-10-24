@@ -2,8 +2,8 @@
 
 return [
 	'providers' => [
-		Laravel\Socialite\SocialiteServiceProvider::class,
-		\App\Providers\AuthServiceProvider::class,
+		// THIS PROVIDERS LIST IS IGNORED. LUMEN USES ONLY THE ONES IN bootstrap/app.php
+		//Laravel\Socialite\SocialiteServiceProvider::class
 	],
 
 	'aliases' => [

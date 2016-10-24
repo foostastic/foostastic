@@ -23,6 +23,8 @@
 
 	<?= $navbar ?>
 
+	<?= $flashMessage ?>
+
 	<?= $content ?>
 
 </div> <!-- /container -->

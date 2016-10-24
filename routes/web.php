@@ -21,7 +21,7 @@ $app->get('/check', function () use ($app) {
 $app->get('/', 'HomeController@index');
 $app->get('/login', 'HomeController@login');
 $app->get('/loginCallback', 'HomeController@loginCallback');
-$app->get('/fakeLogin', 'HomeController@loginAction');
+$app->get('/fakeLogin', 'HomeController@fakeLoginAction');
 $app->get('/logout', 'HomeController@logoutAction');
 $app->get('/account', 'HomeController@account');
 $app->post('/buy', 'HomeController@buyAction');

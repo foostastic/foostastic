@@ -16,7 +16,10 @@ class User
             ->get()
             ->first();
         if ($user === null) {
-            $user = $this->create($username);
+            // Allow only creation of accounts for @tuenti.com
+            if (preg_match('/.*@tuenti.com/Uis', $username)) {
+                $user = $this->create($username);
+            }
         }
         return $user;
     }
