@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         '\App\Console\Commands\CrawlerCommand',
         '\App\Console\Commands\ShuffleCommand',
+        '\App\Console\Commands\RegulatePricesCommand',
     ];
 
     /**

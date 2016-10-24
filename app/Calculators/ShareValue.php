@@ -30,6 +30,10 @@ class ShareValue
         return (int)($this->getValueForPlayer($player) * $share->getAmount());
     }
 
+    /*
+     * PRIVATE METHODS
+     */
+
     private function getRatioForDivision($division)
     {
         $values = array(
