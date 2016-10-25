@@ -15,17 +15,21 @@
 			<a class="navbar-brand" href="/">Foostastic</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
+			<?php if ($userInfo->isLogged === true) { ?>
 			<ul class="nav navbar-nav">
-				<li <?= $page == '/home' ? 'class="active"' : '' ?>><a href="/">Home</a></li>
+				<li <?= $page == '/account' ? 'class="active"' : '' ?>><a href="/">Dashboard</a></li>
+			</ul>
+			<?php } ?>
+			<ul class="nav navbar-nav">
+				<li <?= $page == '/ranking' ? 'class="active"' : '' ?>><a href="/ranking">Ranking</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<?php if ($userInfo->isLogged === true) { ?>
 					<li><a href="#">Credit: <?= $userInfo->capital ?></a></li>
-					<li class="dropdown <?= $page == '/account' ? 'active' : '' ?>">
+					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 							<i class="glyphicon glyphicon-user"></i> <?= $userInfo->name ?> <span class="caret"></span></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="/account">Dashboard</a></li>
 								<li><a href="/logout">Logout</a></li>
 							</ul>
 					</li>

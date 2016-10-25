@@ -17,7 +17,11 @@ class HomeController extends Controller
 
     public function index()
     {
-        return $this->renderOnCanvas($this->renderRanking(), '/home');
+        if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
+            return $this->ranking();
+        } else {
+            return $this->renderOnCanvas($this->renderAccount(), '/account');
+        }
     }
 
     public function login(Request $request)
@@ -35,7 +39,12 @@ class HomeController extends Controller
             return redirect('/');
         }
 
-        return $this->renderOnCanvas($this->renderAccount(), '/login');
+        return $this->renderOnCanvas($this->renderAccount(), '/account');
+    }
+
+    public function ranking()
+    {
+        return $this->renderOnCanvas($this->renderRanking(), '/ranking');
     }
 
     /*

@@ -17,7 +17,7 @@
 		<?php $i=0; foreach ($users as $user) { ?>
 			<tr <?= $userInfo->isLogged === true && $userInfo->id === $user->id ? 'class="bold"' : ''?>>
 				<td class="col-md-1"><?= ++$i ?></td>
-				<td class="col-md-9"><?= $user->name ?></td>
+				<td class="col-md-9"><?= str_replace('@tuenti.com', '', $user->name) ?></td>
 				<td class="col-md-2"><?= $user->wallet->getTotalValue() + $user->capital ?></td>
 			</tr>
 		<?php } ?>

@@ -19,6 +19,7 @@ $app->get('/check', function () use ($app) {
 });
 
 $app->get('/', 'HomeController@index');
+$app->get('/ranking', 'HomeController@ranking');
 $app->get('/login', 'HomeController@login');
 $app->get('/loginCallback', 'HomeController@loginCallback');
 $app->get('/fakeLogin', 'HomeController@fakeLoginAction');
