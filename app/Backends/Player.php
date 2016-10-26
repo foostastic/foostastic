@@ -23,6 +23,14 @@ class Player
      */
     public function getAll()
     {
+        if ($this->isCacheStale()) {
+            $this->prefetch();
+        }
+        return array_values(self::$cacheByName);
+    }
+
+    private function executeGetAll()
+    {
         return Models\Player::orderBy(Models\Player::FIELD_DIVISION)
             ->orderBy(Models\Player::FIELD_POSITION)
             ->get();
@@ -32,6 +40,21 @@ class Player
     {
         foreach ($this->getAll() as $player) {
             $player->delete();
+        }
+    }
+
+    private static $cacheByName = array();
+
+    private function isCacheStale()
+    {
+        return count(self::$cacheByName) == 0;
+    }
+
+    private function prefetch()
+    {
+        self::$cacheByName = array();
+        foreach ($this->executeGetAll() as $player) {
+            self::$cacheByName[$player->getName()] = $player;
         }
     }
 }
