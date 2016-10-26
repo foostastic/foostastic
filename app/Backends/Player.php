@@ -12,10 +12,10 @@ class Player
      */
     public function getByName($name)
     {
-        return Models\Player::where(Models\Player::FIELD_NAME, $name)
-            ->limit(1)
-            ->get()
-            ->first();
+        if ($this->isCacheStale()) {
+            $this->prefetch();
+        }
+        return isset(self::$cacheByName[$name]) ? self::$cacheByName[$name] : null;
     }
 
     /**
