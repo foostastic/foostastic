@@ -26,7 +26,7 @@ class Player
         if ($this->isCacheStale()) {
             $this->prefetch();
         }
-        return array_values(self::$cacheByName);
+        return self::$cachedGetAll;
     }
 
     private function executeGetAll()
@@ -44,6 +44,7 @@ class Player
     }
 
     private static $cacheByName = array();
+    private static $cachedGetAll;
 
     private function isCacheStale()
     {
@@ -53,7 +54,8 @@ class Player
     private function prefetch()
     {
         self::$cacheByName = array();
-        foreach ($this->executeGetAll() as $player) {
+        self::$cachedGetAll = $this->executeGetAll();
+        foreach (self::$cachedGetAll as $player) {
             self::$cacheByName[$player->getName()] = $player;
         }
     }
