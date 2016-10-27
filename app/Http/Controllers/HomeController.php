@@ -91,8 +91,14 @@ class HomeController extends Controller
         $shareBackend = new Backends\Share();
         $share = $shareBackend->getById($shareId);
         if ($share == null) {
-            \Log::error("Tried to sell invalid player.", ['playerId' => $shareId, 'user' => $_SESSION['email']]);
+            \Log::error("Tried to sell invalid player.", ['shareId' => $shareId, 'user' => $_SESSION['email']]);
             $this->flash('Invalid operation on player.', 'danger');
+            return redirect('/');
+        }
+
+        if ($share->getUser() !== $_SESSION['email']) {
+            \Log::error("Hacking attempt! {$_SESSION['email']} trying to sell a share from {$share->getUser()}.", ['shareId' => $shareId, 'user' => $_SESSION['email']]);
+            $this->flash('Hack @dpaneda detected. Don\'t be evil }8-) !<br/> <img src="https://dn3pm25xmtlyu.cloudfront.net/photos/large/726251546.gif?1359835175&Expires=1477640716&Signature=sWYZifXAal7I5fO4fHJ6mk-yc0tGYShhA0Lc5vKedKzOk2aYnLJ3HhwRn5vv5T6zRJprtZo0Rx0Ce-hhGLzP4j-NhG4Xoi-GbIFiF6bCAbvrVA7fXNtzVOGqFngOFCkcd1BXwxsdLufIAT2BZS4s8sKDYnKVSNS1rJlPZ~-Rfyw_&Key-Pair-Id=APKAIYVGSUJFNRFZBBTA">', 'danger');
             return redirect('/');
         }
 
