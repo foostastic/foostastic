@@ -59,4 +59,10 @@ class Player
             self::$cacheByName[$player->getName()] = $player;
         }
     }
+
+    public static function flush()
+    {
+        self::$cacheByName = [];
+        self::$cachedGetAll = null;
+    }
 }
