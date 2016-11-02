@@ -13,9 +13,14 @@ class ObserverController extends Controller
      * VIEWS
      */
 
-    public function onMatchFinished()
+    public function onMatchFinished($password)
     {
-        Artisan::call('crawl:foos');
+        $privatePassword = env('PRIVATE_PASSWORD', false);
+        if ($privatePassword) {
+            if ($password == $privatePassword) {
+                Artisan::call('suso:refresh', ['--update' => true]);
+            }
+        }
         return redirect('/');
     }
 }
