@@ -18,6 +18,7 @@ $app->get('/check', function () use ($app) {
     return $app->version();
 });
 
+// Main
 $app->get('/', 'HomeController@index');
 $app->get('/ranking', 'HomeController@ranking');
 $app->get('/login', 'HomeController@login');
@@ -27,4 +28,6 @@ $app->get('/logout', 'HomeController@logoutAction');
 $app->get('/account', 'HomeController@account');
 $app->post('/buy', 'HomeController@buyAction');
 $app->post('/sell', 'HomeController@sellAction');
+
+// Notifications observer
 $app->get('/onMatchFinished/{password}', 'ObserverController@onMatchFinished');
