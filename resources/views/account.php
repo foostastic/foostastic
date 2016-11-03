@@ -1,5 +1,7 @@
 <?php
-/** @var $userInfo \App\tmp\UserInfo **/
+/** @var $userShares UserShare[] **/
+/** @var $players \App\Models\Player[] **/
+/** @var $shareValueCalculator \App\Calculators\ShareValue **/
 use App\Backends\Share;
 
 ?>
@@ -8,7 +10,7 @@ use App\Backends\Share;
     <div class="row">
         <div class="col-md-7">
             <h2>Your players</h2>
-            <?php if (count($userInfo->wallet->getAllByStock()) > 0) { ?>
+            <?php if (count($userShares) > 0) { ?>
                 <table class="table table-condensed">
                     <thead>
                         <tr>
@@ -19,37 +21,29 @@ use App\Backends\Share;
                             <th class="col-md-2">&nbsp;</th>
                         </tr>
                     </thead>
-                    <?php foreach ($userInfo->wallet->getAllByStock() as $stockId => $purchases) {
-                        $amount = 0;
-                        $buyPrice = 0;
-                        foreach ($purchases as $purchase) {
-                            $currentPrice = $shareValueCalculator->getValueForPlayerName($stockId) * $purchase->purchaseAmount;
-                            $amount = $purchase->purchaseAmount;
-                            $buyPrice = $purchase->purchaseAmount * $purchase->purchaseValue;
-                            $difference = $currentPrice  - $buyPrice;
-                            $percentage = $difference*100/$buyPrice;
+                    <?php foreach ($userShares as $userShare) {
                             ?>
                             <tr>
                                 <td>
-                                    <?= $stockId ?>
-                                    <?php if ($amount > 1) { ?>
-                                        ( x<?= $amount ?> )
+                                    <?= $userShare->playerName ?>
+                                    <?php if ($userShare->amount > 1) { ?>
+                                        ( x<?= $userShare->amount ?> )
                                     <?php } ?>
                                 </td>
-                                <td align="right"><?= $buyPrice ?> </td>
-                                <td align="right"><?= $currentPrice ?></td>
+                                <td align="right"><?= $userShare->buyPrice ?> </td>
+                                <td align="right"><?= $userShare->currentPrice ?></td>
                                 <td align="center">
-                                    <span class="label <?= $percentage >= 0 ? 'label-success' : 'label-danger' ?>">
-                                        <i class="glyphicon glyphicon-chevron-<?= $percentage >= 0 ? 'up' : 'down' ?>"></i> <?= number_format(abs($percentage), 2) ?>%
+                                    <span class="label <?= $userShare->percentage >= 0 ? 'label-success' : 'label-danger' ?>">
+                                        <i class="glyphicon glyphicon-chevron-<?= $userShare->percentage >= 0 ? 'up' : 'down' ?>"></i> <?= number_format(abs($userShare->percentage), 2) ?>%
                                     </span>
                                 </td>
                                 <td align="right">
                                     <form class="form-inline" action="/sell" method="post">
                                         <div class="form-group form-group-sm">
                                             <div class="input-group">
-                                                <input type="hidden" name="shareId" value="<?= $purchase->shareId ?>">
+                                                <input type="hidden" name="shareId" value="<?= $userShare->shareId ?>">
                                                 <select name="amount" class="form-control">
-                                                    <?php for ($i = 1; $i <= $amount; $i++) { ?>
+                                                    <?php for ($i = 1; $i <= $userShare->amount; $i++) { ?>
                                                         <option><?= $i ?></option>
                                                     <?php } ?>
                                                 </select>
@@ -64,8 +58,6 @@ use App\Backends\Share;
                             <?php
                         }
                         ?>
-
-                        <?php } ?>
                 </table>
             <?php } else { ?>
                 No players yet.

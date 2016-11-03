@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Api\UserInfoApi;
 use App\Backends;
 use App\Backends\User;
+use App\Calculators\ShareValue;
 use App\Services\FlashMessages\FlashService;
 use App\Services\Rendering\RenderService;
+use App\tmp\StockPurchase;
 use App\tmp\UserInfo;
+use App\ViewModels\UserShare;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,17 +27,23 @@ class HomeController extends Controller
      * @var FlashService
      */
     private $flashService;
+    /**
+     * @var ShareValue
+     */
+    private $shareValueCalculator;
 
     /**
      * @param UserInfoApi $userInfoApi
      * @param RenderService $renderService
      * @param FlashService $flashService
+     * @param ShareValue $shareValueCalculator
      */
-    public function __construct(UserInfoApi $userInfoApi, RenderService $renderService, FlashService $flashService)
+    public function __construct(UserInfoApi $userInfoApi, RenderService $renderService, FlashService $flashService, ShareValue $shareValueCalculator)
     {
         $this->userInfoApi = $userInfoApi;
         $this->renderService = $renderService;
         $this->flashService = $flashService;
+        $this->shareValueCalculator = $shareValueCalculator;
     }
 
     /*
@@ -197,9 +206,10 @@ class HomeController extends Controller
         $userInfo = $this->getUserInfo();
         $playerBackend = new Backends\Player();
         $players = $playerBackend->getAll();
-        $shareValueCalculator = new \App\Calculators\ShareValue();
 
-        return view('account', ['userInfo' => $userInfo, 'players' => $players, 'shareValueCalculator' => $shareValueCalculator]);
+        $userShares = $this->getUserShares($userInfo);
+
+        return view('account', ['userShares' => $userShares, 'players' => $players, 'shareValueCalculator' => $this->shareValueCalculator]);
     }
 
     private function getGoogleProvider($request) {
@@ -212,7 +222,7 @@ class HomeController extends Controller
     }
 
     /*
-     * DATA COLLECTION
+     * DATA COLLECTION / FORMAT
      */
 
     /**
@@ -222,5 +232,29 @@ class HomeController extends Controller
     {
         // TODO This could be cached
         return $this->userInfoApi->getUserInfo();
+    }
+
+    /**
+     * @param $userInfo
+     * @return UserShare[]
+     */
+    private function getUserShares(UserInfo $userInfo)
+    {
+        $userShares = [];
+        foreach ($userInfo->wallet->getAllByStock() as $stockId => $purchases) {
+            /** @var StockPurchase $purchase */
+            foreach ($purchases as $purchase) {
+                $userShare = new UserShare();
+                $userShare->playerName = $stockId;
+                $userShare->currentPrice = $this->shareValueCalculator->getValueForPlayerName($stockId) * $purchase->purchaseAmount;
+                $userShare->amount = $purchase->purchaseAmount;
+                $userShare->buyPrice = $purchase->purchaseAmount * $purchase->purchaseValue;
+                $userShare->difference = $userShare->currentPrice - $userShare->buyPrice;
+                $userShare->percentage = $userShare->difference * 100 / $userShare->buyPrice;
+                $userShare->shareId = $purchase->shareId;
+                $userShares[] = $userShare;
+            }
+        }
+        return $userShares;
     }
 }
