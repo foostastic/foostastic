@@ -1,5 +1,5 @@
 <?php
-/** @var $userShares UserShare[] **/
+/** @var $userShares \App\ViewModels\UserShare[] **/
 /** @var $players \App\Models\Player[] **/
 /** @var $shareValueCalculator \App\Calculators\ShareValue **/
 use App\Backends\Share;

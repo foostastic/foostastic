@@ -7,15 +7,27 @@ class UserLogBackend
 {
 
     /**
-     * @param $username
+     * @param string $username
      * @return \App\Models\UserLog[]
      */
     public function getByUsername($username)
     {
-        $users = Models\UserLog::where(Models\UserLog::FIELD_USERNAME, $username)
+        $logs = Models\UserLog::where(Models\UserLog::FIELD_USERNAME, $username)
             ->orderBy(Models\UserLog::FIELD_LOG_TIME, 'desc')
             ->get();
-        return $users;
+        return $logs;
+    }
+
+    /**
+     * @param string $username
+     * @return \App\Models\UserLog|null
+     */
+    public function getLastChange($username, $currentPoints)
+    {
+        return Models\UserLog::query()->where(Models\UserLog::FIELD_USERNAME, $username)
+            ->where(Models\UserLog::FIELD_POINTS, '!=', $currentPoints)
+            ->orderBy(Models\UserLog::FIELD_LOG_TIME, 'desc')
+            ->first();
     }
 
     /**

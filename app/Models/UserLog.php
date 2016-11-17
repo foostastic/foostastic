@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class UserLog extends Model
@@ -44,6 +45,9 @@ class UserLog extends Model
         return $this->setAttribute(self::FIELD_POINTS, $value);
     }
 
+    /**
+     * @return Carbon
+     */
     public function getLogTime() {
         return  $this->getAttribute(self::FIELD_LOG_TIME);
     }
