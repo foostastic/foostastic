@@ -1,6 +1,6 @@
 <?php
-/** @var $userInfo \App\tmp\UserInfo */
-/** @var $users \App\tmp\UserInfo[] */
+/** @var $userInfo \App\ViewModels\UserInfo */
+/** @var $users \App\ViewModels\UserInfo[] */
 ?>
 <!-- Ranking -->
 <div class="container">

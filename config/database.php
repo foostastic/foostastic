@@ -68,6 +68,12 @@ return [
             'strict'    => env('DB_STRICT_MODE', false),
         ],
 
+        'test' => array(
+            'driver'   => 'sqlite',
+            'database' => __DIR__.'/../database/testing.sqlite',
+            'prefix'   => '',
+        ),
+
     ],
 
     /*

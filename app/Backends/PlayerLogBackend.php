@@ -28,6 +28,7 @@ class PlayerLogBackend
             ->setDivision($player->getDivision())
             ->setPosition($player->getPosition())
             ->setSharePoints($sharePoints)
+            ->setValue(0)
             ->save();
     }
 }

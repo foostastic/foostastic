@@ -43,6 +43,9 @@ class ShareTest extends \TestCase
 
         $player = new Models\Player();
         $player->setName($playerName = 'da_player');
+        $player->setDivision($anyDivision = 1);
+        $player->setPosition($anyPosition = 1);
+        $player->setPoints($anyPoints = 1);
         $player->save();
 
         $backend = new Share();

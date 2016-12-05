@@ -3,7 +3,7 @@ namespace App\Api;
 
 use App\Backends\User;
 use App\Services\FlashMessages\FlashService;
-use App\tmp\UserInfo;
+use App\ViewModels\UserInfo;
 
 class UserInfoApi
 {

@@ -26,6 +26,10 @@ $app->withFacades();
 
 $app->withEloquent();
 
+if ($app->environment() === 'testing') {
+    touch($app->databasePath() . '/testing.sqlite');
+}
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings

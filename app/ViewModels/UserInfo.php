@@ -1,9 +1,10 @@
 <?php
 
-namespace App\tmp;
+namespace App\ViewModels;
 use App\Backends\User;
 use App\Backends\UserLogBackend;
 use App\Models\UserLog;
+use App\ViewModels\Wallet;
 
 class UserInfo
 {

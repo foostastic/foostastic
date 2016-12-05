@@ -1,6 +1,6 @@
 <?php
 
-namespace App\tmp;
+namespace App\ViewModels;
 
 use App\Backends\Player;
 use App\Backends\Share;

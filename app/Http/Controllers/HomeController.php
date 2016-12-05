@@ -8,8 +8,8 @@ use App\Backends\User;
 use App\Calculators\ShareValue;
 use App\Services\FlashMessages\FlashService;
 use App\Services\Rendering\RenderService;
-use App\tmp\StockPurchase;
-use App\tmp\UserInfo;
+use App\ViewModels\StockPurchase;
+use App\ViewModels\UserInfo;
 use App\ViewModels\UserShare;
 use Illuminate\Http\Request;
 

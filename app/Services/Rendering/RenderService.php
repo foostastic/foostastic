@@ -3,7 +3,7 @@
 namespace App\Services\Rendering;
 
 use App\Services\FlashMessages\FlashService;
-use App\tmp\UserInfo;
+use App\ViewModels\UserInfo;
 
 class RenderService
 {

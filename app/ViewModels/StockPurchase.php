@@ -1,6 +1,8 @@
 <?php
 
-namespace App\tmp;
+namespace App\ViewModels;
+
+use App\ViewModels\Random;
 
 class StockPurchase
 {

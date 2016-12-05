@@ -1,5 +1,5 @@
 <?php
-/** @var $userInfo \App\tmp\UserInfo **/
+/** @var $userInfo \App\ViewModels\UserInfo **/
 /** @var $page String **/
 ?>
 <!-- Static navbar -->
