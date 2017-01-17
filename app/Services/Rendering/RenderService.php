@@ -26,6 +26,7 @@ class RenderService
         return view('base',
             [
                 'flashMessage' => $this->renderFlashMessage(),
+                'motd' => $this->renderMotd(),
                 'navbar' => $this->renderNavbar($userInfo, $page),
                 'content' => $content
             ]
@@ -43,6 +44,13 @@ class RenderService
             'userInfo' => $userInfo,
         ];
         return view('navbar', $navbarInfo);
+    }
+
+    private function renderMotd()
+    {
+        $message = env('MOTD', null);
+        $level = env('MOTD_LEVEL', 'info');
+        return view('motd', ['message' => $message, 'level' => $level]);
     }
 
     private function renderFlashMessage()

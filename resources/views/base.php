@@ -23,6 +23,7 @@
 
 	<?= $navbar ?>
 
+	<?= $motd ?>
 	<?= $flashMessage ?>
 
 	<?= $content ?>
