@@ -30,11 +30,12 @@ class SusoRefreshCommand extends Command
             $this->error('Missing SUSO_FOOS_API_URL config');
             return;
         }
+        $seasonId = env('SUSO_FOOS_API_SEASON', 'current');
         $players = $this->susoGet($url, '/players');
-        $current = $this->susoGet($url, '/seasons/current');
+        $season = $this->susoGet($url, '/seasons/' . $seasonId);
         $results = [];
         $divisionNum = 1;
-        foreach ($current['divisions'] as $division) {
+        foreach ($season['divisions'] as $division) {
             $id = $division['id'];
             $playerInfos = $this->susoGet($url, "/divisions/$id/classification");
             foreach ($playerInfos as $playerInfo) {
